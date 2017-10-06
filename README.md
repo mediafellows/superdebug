@@ -1,26 +1,24 @@
-# Simple Log For Super Agent 
+# Debug Superagent Requests - generates curl output
 
-[![Build Status](https://travis-ci.org/sebastianlzy/superagent-debugger.svg?branch=master)](https://travis-ci.org/sebastianlzy/superagent-debugger)
-[![Coverage Status](https://coveralls.io/repos/github/sebastianlzy/superagent-debugger/badge.svg)](https://coveralls.io/github/sebastianlzy/superagent-debugger)
-
-### Introduction
-An easy and fast way to identify and replicate rogue request on the fly 
-
-### Dependencies
-Logging and debugging for [superagent](https://github.com/visionmedia/superagent)
+- logging for [superagent](https://github.com/visionmedia/superagent)
+- logs in curl format
+- let's you copy&paste the curl output to send to someone else
+- works with node.js and in the browser with browserify or webpack
+- only dependency is [debug](https://github.com/visionmedia/debug)
+- works with sent `data` and `formData`
 
 -----------
 ### Install
 
 ```cli
-npm install --save superagent-debugger
+npm i -S superdebug
 ```
 
 ### Usage
 
 ```js
 let superagent = require('superagent');
-let superdebug = require('superagent-debugger');
+let superdebug = require('superdebug');
 
 superagent('GET', 'http://localhost:3000/debug')
     .set({Accept: 'application/json'})
@@ -39,32 +37,36 @@ super-debug HTTP GET 200 http://localhost:3000/debug?superdebug=is-awesome (23ms
 
 ### Using Debug
  ```
- DEBUG=super-debug,super-curl node sdk.js
+ DEBUG=super-* node test/test-server.js
  ```
-![screeshot1](https://raw.githubusercontent.com/sebastianlzy/superagent-debugger/master/sample-log.jpg)
+![superdebug-1](https://raw.githubusercontent.com/andineck/superdebug/master/superdebug-1.png)
 
-### options
+output with json data
 
-```js
-const options = {logName: 'logDebug', curlName: 'curlDebug'}
-    
- superagent('GET', 'http://localhost:3000/debug')
-     .set({Accept: 'application/json'})
-     .query({superdebug: 'is-awesome'})
-     .use(superdebug(console.info, options))
+![superdebug-2](https://raw.githubusercontent.com/andineck/superdebug/master/superdebug-2.png)
+
+### Options
+
+- you can call `superdebug()` without arguments -> produces only log output with set `DEBUG` environment variable: 
+  - examples: `DEBUG=super-curl` or `DEBUG=super-debug`
+- or you can call `superdebug(console.info)` with your preferred logger e.g. `console.info`
+
+```js    
+superagent('GET', 'http://localhost:3000/debug')
+  .use(superdebug())
 ```
 
+### Test
+
+run: 
+```sh
+npm test
 ```
-DEBUG=logDebug,curlDebug node sdk.js
-```
 
-### Help
-Refer to the example provided
+### License
 
-### Improvement
+MIT
 
-1. [x] Test/Test coverage report
-2. [ ] CI/CD process
-3. [ ] Allow debug for client side request
+### Credits
 
-Any feedbacks or contributions are welcome!
+- https://github.com/sebastianlzy/superagent-debugger

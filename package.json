@@ -1,45 +1,34 @@
 {
-  "name": "superagent-debugger",
-  "version": "1.2.9",
-  "description": "A simple debugging log for superagent",
-  "main": "lib/index.js",
+  "name": "superdebug",
+  "version": "2.0.0",
+  "description": "Debug Superagent Requests - generates curl output",
+  "main": "superdebug-server.js",
+  "browser": "superdebug-browser.js",
   "scripts": {
-    "test": "_mocha --compilers js:babel-core/register *.spec.js",
-    "test:coverage": "nyc --reporter=html --reporter=text npm run test",
-    "coverage": "nyc --reporter=text-lcov npm run test | coveralls",
-    "build": "babel index.js -d lib"
+    "test": "DEBUG=super-* tape test/*.js",
+    "coverage": "nyc --reporter=html --reporter=text npm run test"
   },
   "keywords": [
-    "logging",
+    "log",
     "debug",
     "superagent",
     "curl"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/sebastianlzy/superagent-debugger"
+    "url": "https://github.com/andineck/superdebug"
   },
-  "author": "sebastian",
+  "author": "Andi Neck",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-preset-env": "^1.1.8",
-    "babel-watch": "^2.0.5",
-    "chai": "^3.5.0",
-    "coveralls": "^2.11.15",
-    "express": "^4.14.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
+    "form-data": "^2.3.1",
+    "nock": "^9.0.22",
     "nyc": "^10.1.2",
-    "sinon": "^1.17.7",
-    "superagent": "^3.3.2"
+    "superagent": "^3.6.3",
+    "tape": "^4.8.0"
   },
   "dependencies": {
     "chalk": "^1.1.3",
-    "debug": "^2.6.0",
-    "lodash": "^4.17.4",
-    "moment": "^2.17.1",
-    "query-string": "^4.3.1"
+    "debug": "^2.6.0"
   }
 }
