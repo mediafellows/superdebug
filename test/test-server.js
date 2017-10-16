@@ -19,6 +19,14 @@ nock('http://localhost')
   })
   .persist()
 
+nock('http://localhost')
+  .get('/echo')
+  .query(true)
+  .reply((uri, requestBody) => {
+    return [200, uri]
+  })
+  .persist()
+
 // superdebug tests -> check console
 test('should call simple get', t => {
   superagent
@@ -60,7 +68,19 @@ test('should call get with query object', t => {
     })
 })
 
-
+test('should call get with query object', t => {
+  superagent
+    .get('http://localhost/echo?my=paramA&your=paramB')
+    .query({ query: 'Manny' })
+    .use(superdebug())
+    .end((err, result) => {
+      if (err) return t.end(err)
+      t.ok(result)
+      t.ok(result.text)
+      t.isEqual(result.text, '/echo?my=paramA&your=paramB&query=Manny')
+      t.end()
+    })
+})
 
 test('should call post endpoint', t => {
   superagent
@@ -153,7 +173,7 @@ test('should call post endpoint - in green', t => {
   superagent
     .post('http://localhost/test-server?my=paramA&your=paramB')
     .use(superdebug(console.warn))
-    .type('form')    
+    .type('form')
     .send(formData)
     .end((err, result) => {
       if (err) return t.end(err)
