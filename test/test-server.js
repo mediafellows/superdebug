@@ -166,9 +166,9 @@ test('should call post endpoint - in green', t => {
 })
 
 test('should call post endpoint - in green', t => {
-  var formData = new FormData();
-  formData.append("user", "i");
-  formData.append("password", "am");
+  var formData = new FormData()
+  formData.append('user', 'i')
+  formData.append('password', 'am')
 
   superagent
     .post('http://localhost/test-server?my=paramA&your=paramB')

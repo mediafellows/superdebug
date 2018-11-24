@@ -5,6 +5,8 @@
   "main": "superdebug-server.js",
   "browser": "superdebug-browser.js",
   "scripts": {
+    "lint": "standard",
+    "fix": "standard --fix",
     "test": "DEBUG=super-* tape test/*.js",
     "coverage": "nyc --reporter=html --reporter=text npm run test"
   },
@@ -25,6 +27,7 @@
     "nock": "^9.0.22",
     "nyc": "^10.1.2",
     "superagent": "^3.6.3",
+    "standard": "^12.0.1",
     "tape": "^4.8.0"
   },
   "dependencies": {
