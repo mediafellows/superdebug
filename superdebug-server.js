@@ -35,7 +35,9 @@ function constructUrl (requestUrl, query) {
 }
 
 function getColorByResponseStatus (status) {
-  if (status < 300) {
+  if (status === 'NO_STATUS_CODE') {
+    return 'red'
+  } else if (status < 300) {
     return 'green'
   } else if (status < 400) {
     return 'yellow'
@@ -54,26 +56,28 @@ function getColorByResponseTime (ms) {
   return 'red'
 };
 
-function handleResponse (request, start, logger, debugLog, debugCurl) {
-  return function (response) {
+function handleResponse (request, start, logger, debugLog, debugCurl, isError) {
+  return function (responseOrError) {
     var now = new Date().getTime()
     var elapsed = now - start
     var elapseTime = elapsed + 'ms'
     var protocol = request.protocol.toUpperCase().replace(/[^\w]/g, '')
     var requestMethod = request.method.toUpperCase()
     var curl = formatToCurl(request, request.url)
+    var status = isError ? 'NO_STATUS_CODE' : responseOrError.status
 
     debugCurl(chalk.gray(curl))
     logger(curl)
+    if (isError) logger(chalk.red(responseOrError))
     debugLog(
       '%s %s %s %s %s',
       chalk.magenta(protocol),
       chalk.cyan(requestMethod),
-      chalk[getColorByResponseStatus(response.status)](response.status),
+      chalk[getColorByResponseStatus(status)](status),
       chalk.gray(request.url),
       chalk.gray('(') + chalk[getColorByResponseTime(elapsed)](elapseTime) + chalk.gray(')')
     )
-    logger(protocol + ' ' + requestMethod + ' ' + response.status + ' ' + request.url + ' (' + elapseTime + ')')
+    logger(protocol + ' ' + requestMethod + ' ' + status + ' ' + request.url + ' (' + elapseTime + ')')
   }
 };
 
@@ -85,6 +89,7 @@ module.exports = function superdebug (logger, options = { logName: 'super-debug'
     var debugLog = _debug(options.logName)
     var debugCurl = _debug(options.curlName)
     var start = new Date().getTime()
-    request.on('response', handleResponse(request, start, logger, debugLog, debugCurl))
+    request.on('response', handleResponse(request, start, logger, debugLog, debugCurl, false))
+    request.on('error', handleResponse(request, start, logger, debugLog, debugCurl, true))
   }
 }
